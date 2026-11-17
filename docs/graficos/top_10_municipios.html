@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    #vis.vega-embed {
+      width: 100%;
+      display: flex;
+    }
+
+    #vis.vega-embed details,
+    #vis.vega-embed details summary {
+      position: relative;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@6"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@6.4.1"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@7"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-3e5753346a819d2b6e8770a5e32b19f8"}, "mark": {"type": "bar"}, "encoding": {"tooltip": [{"field": "MUNICIPIO", "title": "Municipio", "type": "nominal"}, {"field": "cantidad_hurtos", "format": ",", "title": "Cantidad de hurtos", "type": "quantitative"}], "x": {"field": "cantidad_hurtos", "title": "Cantidad de hurtos", "type": "quantitative"}, "y": {"field": "MUNICIPIO", "sort": "-x", "title": "Municipio", "type": "nominal"}}, "height": 400, "title": {"text": "Top 10 municipios con m\u00e1s hurtos", "subtitle": "Fuente: datos/limpio/hurto_personas_limpio.csv"}, "width": 700, "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-3e5753346a819d2b6e8770a5e32b19f8": [{"MUNICIPIO": "BOGOTA D.C.", "cantidad_hurtos": 1379012}, {"MUNICIPIO": "MEDELLIN", "cantidad_hurtos": 288620}, {"MUNICIPIO": "CALI", "cantidad_hurtos": 261159}, {"MUNICIPIO": "BARRANQUILLA", "cantidad_hurtos": 143107}, {"MUNICIPIO": "BUCARAMANGA", "cantidad_hurtos": 95463}, {"MUNICIPIO": "CARTAGENA DE INDIAS", "cantidad_hurtos": 74083}, {"MUNICIPIO": "VILLAVICENCIO", "cantidad_hurtos": 73673}, {"MUNICIPIO": "PASTO", "cantidad_hurtos": 66162}, {"MUNICIPIO": "IBAGUE", "cantidad_hurtos": 65246}, {"MUNICIPIO": "SIN ESTABLECER", "cantidad_hurtos": 64185}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>

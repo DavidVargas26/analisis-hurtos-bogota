@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Análisis exploratorio de hurtos de personas a partir de registros territoriales y temporales.">
+  <title>Análisis exploratorio de hurtos de personas</title>
+  <style>
+    :root {
+      --fondo: #f5f7fb;
+      --superficie: #ffffff;
+      --texto: #1d2939;
+      --texto-suave: #475467;
+      --primario: #155eef;
+      --borde: #d0d5dd;
+      --sombra: 0 8px 24px rgba(16, 24, 40, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--fondo);
+      color: var(--texto);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    header {
+      background: #102a56;
+      color: #ffffff;
+      padding: 4rem 1.5rem;
+    }
+
+    header .contenedor,
+    main {
+      margin: 0 auto;
+      max-width: 1180px;
+    }
+
+    header h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.1;
+      margin: 0 0 1rem;
+      max-width: 850px;
+    }
+
+    header p {
+      color: #d0e2ff;
+      font-size: 1.15rem;
+      margin: 0;
+      max-width: 760px;
+    }
+
+    main {
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    section {
+      background: var(--superficie);
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      box-shadow: var(--sombra);
+      margin-bottom: 1.5rem;
+      padding: 1.75rem;
+    }
+
+    h2 {
+      color: #102a56;
+      font-size: 1.6rem;
+      margin: 0 0 1rem;
+    }
+
+    h3 {
+      color: #344054;
+      margin-bottom: 0.5rem;
+    }
+
+    p,
+    li {
+      color: var(--texto-suave);
+    }
+
+    .resumen {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      margin-top: 1.25rem;
+    }
+
+    .indicador {
+      background: #eff4ff;
+      border-left: 4px solid var(--primario);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    .indicador strong {
+      color: var(--texto);
+      display: block;
+      font-size: 1.45rem;
+    }
+
+    .graficos {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+
+    figure {
+      border: 1px solid var(--borde);
+      border-radius: 8px;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    figure h3,
+    figure p,
+    figure a {
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
+
+    figure h3 {
+      margin-top: 1rem;
+    }
+
+    figure p {
+      font-size: 0.95rem;
+    }
+
+    iframe {
+      background: #ffffff;
+      border: 0;
+      display: block;
+      height: 430px;
+      width: 100%;
+    }
+
+    a {
+      color: var(--primario);
+      font-weight: 600;
+    }
+
+    footer {
+      color: var(--texto-suave);
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="contenedor">
+      <h1>Análisis exploratorio de hurtos de personas</h1>
+      <p>Exploración temporal y territorial de los registros de hurtos mediante Python, pandas y Altair.</p>
+    </div>
+  </header>
+
+  <main>
+    <section id="objetivo">
+      <h2>Objetivo</h2>
+      <p>
+        Describir cómo se distribuyen los hurtos registrados a lo largo del
+        tiempo y entre departamentos y municipios, identificando tendencias y
+        concentraciones que orienten análisis posteriores.
+      </p>
+    </section>
+
+    <section id="dataset">
+      <h2>Descripción del dataset</h2>
+      <p>
+        El análisis utiliza <code>HURTO_PERSONAS_20261117.csv</code>, preparado
+        en <code>datos/limpio/hurto_personas_limpio.csv</code>. El archivo
+        contiene 654.716 filas y las variables de fecha del hecho, códigos y
+        nombres territoriales, y cantidad de hurtos. La serie disponible va de
+        enero de 2003 a septiembre de 2026.
+      </p>
+      <div class="resumen">
+        <div class="indicador">
+          <strong>654.716</strong>
+          <span>filas analizadas</span>
+        </div>
+        <div class="indicador">
+          <strong>3.801.411</strong>
+          <span>hurtos registrados</span>
+        </div>
+        <div class="indicador">
+          <strong>2003–2026</strong>
+          <span>periodo disponible</span>
+        </div>
+        <div class="indicador">
+          <strong>6</strong>
+          <span>variables originales</span>
+        </div>
+      </div>
+      <p>
+        Las cantidades son valores absolutos. El dataset no incluye población,
+        exposición al riesgo ni cobertura del reporte; por ello, los gráficos
+        no representan tasas ni permiten establecer causalidad.
+      </p>
+    </section>
+
+    <section id="metodologia">
+      <h2>Metodología</h2>
+      <ol>
+        <li>Se leyó el archivo crudo sin modificarlo.</li>
+        <li>Se convirtió <code>FECHA HECHO</code> a formato de fecha.</li>
+        <li>Se derivaron año, mes y nombres de mes y día de la semana.</li>
+        <li>Se agruparon y sumaron los valores de <code>CANTIDAD</code> según la dimensión de cada gráfico.</li>
+        <li>Se generaron gráficos de líneas y barras con Altair y se exportaron a HTML.</li>
+      </ol>
+    </section>
+
+    <section id="resultados">
+      <h2>Resultados principales</h2>
+      <ul>
+        <li>
+          La serie temporal presenta una tendencia general ascendente hasta
+          2019, una caída marcada en 2020 y niveles altos en 2022 y 2023.
+        </li>
+        <li>
+          Octubre de 2022 es el máximo mensual observado, con 37.326 hurtos.
+        </li>
+        <li>
+          Bogotá D.C. concentra 1.379.012 registros, el 36,28 % del total,
+          seguida por Antioquia y Valle del Cauca.
+        </li>
+        <li>
+          Los diez municipios del ranking reúnen aproximadamente el 66,05 % de
+          la cantidad registrada.
+        </li>
+        <li>
+          La categoría <code>SIN ESTABLECER</code> aparece en las clasificaciones
+          territoriales y debe considerarse al interpretar los rankings.
+        </li>
+      </ul>
+    </section>
+
+    <section id="graficos">
+      <h2>Gráficos interactivos</h2>
+      <div class="graficos">
+        <figure>
+          <h3>Evolución mensual</h3>
+          <iframe
+            src="graficos/evolucion_mensual.html"
+            title="Gráfico de evolución mensual de hurtos"
+            loading="lazy"></iframe>
+          <p>Serie temporal mensual de la suma de hurtos registrados.</p>
+          <a href="graficos/evolucion_mensual.html">Abrir gráfico completo</a>
+        </figure>
+
+        <figure>
+          <h3>Top 10 municipios</h3>
+          <iframe
+            src="graficos/top_10_municipios.html"
+            title="Gráfico del top 10 de municipios"
+            loading="lazy"></iframe>
+          <p>Municipios con mayor cantidad acumulada de hurtos.</p>
+          <a href="graficos/top_10_municipios.html">Abrir gráfico completo</a>
+        </figure>
+
+        <figure>
+          <h3>Departamentos</h3>
+          <iframe
+            src="graficos/departamentos.html"
+            title="Gráfico de hurtos por departamento"
+            loading="lazy"></iframe>
+          <p>Distribución territorial por departamento, ordenada de mayor a menor.</p>
+          <a href="graficos/departamentos.html">Abrir gráfico completo</a>
+        </figure>
+      </div>
+    </section>
+
+    <section id="conclusiones">
+      <h2>Conclusiones</h2>
+      <p>
+        Los registros muestran una evolución temporal no estable y una
+        concentración territorial marcada. Bogotá D.C., Antioquia y Valle del
+        Cauca reúnen una parte importante del total, mientras que el máximo
+        mensual se ubica en octubre de 2022.
+      </p>
+      <p>
+        Estos resultados son descriptivos y se refieren a cantidades
+        registradas. Para comparar niveles de riesgo entre territorios o
+        explicar los cambios temporales sería necesario incorporar población,
+        exposición, cobertura y otras variables contextuales.
+      </p>
+      <p>
+        La interpretación detallada está disponible en
+        <a href="interpretacion_resultados.md">interpretacion_resultados.md</a>.
+      </p>
+    </section>
+
+    <footer>
+      Proyecto de análisis exploratorio de datos · Gráficos generados con Altair
+    </footer>
+  </main>
+</body>
+</html>

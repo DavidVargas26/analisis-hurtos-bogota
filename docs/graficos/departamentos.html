@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    #vis.vega-embed {
+      width: 100%;
+      display: flex;
+    }
+
+    #vis.vega-embed details,
+    #vis.vega-embed details summary {
+      position: relative;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@6"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@6.4.1"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@7"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-0f916227550976e18ca585191cba3c20"}, "mark": {"type": "bar"}, "encoding": {"tooltip": [{"field": "DEPARTAMENTO", "title": "Departamento", "type": "nominal"}, {"field": "cantidad_hurtos", "format": ",", "title": "Cantidad de hurtos", "type": "quantitative"}], "x": {"field": "cantidad_hurtos", "title": "Cantidad de hurtos", "type": "quantitative"}, "y": {"field": "DEPARTAMENTO", "sort": "-x", "title": "Departamento", "type": "nominal"}}, "height": 500, "title": {"text": "Cantidad de hurtos por departamento", "subtitle": "Fuente: datos/limpio/hurto_personas_limpio.csv"}, "width": 700, "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-0f916227550976e18ca585191cba3c20": [{"DEPARTAMENTO": "BOGOTA D.C.", "cantidad_hurtos": 1379012}, {"DEPARTAMENTO": "ANTIOQUIA", "cantidad_hurtos": 418269}, {"DEPARTAMENTO": "VALLE DEL CAUCA", "cantidad_hurtos": 363414}, {"DEPARTAMENTO": "CUNDINAMARCA", "cantidad_hurtos": 189921}, {"DEPARTAMENTO": "ATLANTICO", "cantidad_hurtos": 188556}, {"DEPARTAMENTO": "SANTANDER", "cantidad_hurtos": 173147}, {"DEPARTAMENTO": "TOLIMA", "cantidad_hurtos": 94924}, {"DEPARTAMENTO": "BOLIVAR", "cantidad_hurtos": 88445}, {"DEPARTAMENTO": "META", "cantidad_hurtos": 88041}, {"DEPARTAMENTO": "NARI\u00d1O", "cantidad_hurtos": 88031}, {"DEPARTAMENTO": "HUILA", "cantidad_hurtos": 86121}, {"DEPARTAMENTO": "RISARALDA", "cantidad_hurtos": 64843}, {"DEPARTAMENTO": "SIN ESTABLECER", "cantidad_hurtos": 64185}, {"DEPARTAMENTO": "CAUCA", "cantidad_hurtos": 60790}, {"DEPARTAMENTO": "NORTE DE SANTANDER", "cantidad_hurtos": 53333}, {"DEPARTAMENTO": "MAGDALENA", "cantidad_hurtos": 52682}, {"DEPARTAMENTO": "CESAR", "cantidad_hurtos": 51457}, {"DEPARTAMENTO": "BOYACA", "cantidad_hurtos": 48671}, {"DEPARTAMENTO": "CALDAS", "cantidad_hurtos": 48342}, {"DEPARTAMENTO": "QUINDIO", "cantidad_hurtos": 36547}, {"DEPARTAMENTO": "SUCRE", "cantidad_hurtos": 35401}, {"DEPARTAMENTO": "CORDOBA", "cantidad_hurtos": 31771}, {"DEPARTAMENTO": "CASANARE", "cantidad_hurtos": 22089}, {"DEPARTAMENTO": "LA GUAJIRA", "cantidad_hurtos": 21797}, {"DEPARTAMENTO": "CAQUETA", "cantidad_hurtos": 19532}, {"DEPARTAMENTO": "CHOCO", "cantidad_hurtos": 10503}, {"DEPARTAMENTO": "SAN ANDRES ISLAS", "cantidad_hurtos": 5946}, {"DEPARTAMENTO": "ARAUCA", "cantidad_hurtos": 5232}, {"DEPARTAMENTO": "PUTUMAYO", "cantidad_hurtos": 5130}, {"DEPARTAMENTO": "AMAZONAS", "cantidad_hurtos": 1715}, {"DEPARTAMENTO": "GUAVIARE", "cantidad_hurtos": 1502}, {"DEPARTAMENTO": "GUAINIA", "cantidad_hurtos": 882}, {"DEPARTAMENTO": "VICHADA", "cantidad_hurtos": 807}, {"DEPARTAMENTO": "VAUPES", "cantidad_hurtos": 373}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>
